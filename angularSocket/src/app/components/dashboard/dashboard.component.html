@@ -1,0 +1,28 @@
+<mat-toolbar color="primary">
+    <button (click)="sidenav.toggle()" mat-icon-button class="noBorder primary" mat-icon-button>
+        <mat-icon>menu</mat-icon>
+    </button>
+    <span class="ml15">Glashaus</span>
+</mat-toolbar>
+<mat-sidenav-container class="sidenavContainer" autosize>
+    <mat-sidenav #sidenav class="example-sidenav" mode="side">
+        <mat-nav-list class="sideNavList">
+            <ng-container *ngFor="let option of sideNavBarOptions">
+                <mat-checkbox [(ngModel)]="option.state" class="checkboxStyle">{{option.name}}</mat-checkbox>
+                <br />
+            </ng-container>
+        </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content class="text-center">
+        <div class="row">
+            <ng-container *ngFor="let option of sideNavBarOptions">
+                <mat-card *ngIf="option.state" class=" col-md-3 box">
+                    <mat-card-title>{{option.name}}</mat-card-title>
+                    <mat-card-content class="box">
+                        <canvasjs-chart class="chart" height="100px" [options]="lineChartOptions"></canvasjs-chart>
+                    </mat-card-content>
+                </mat-card>
+            </ng-container>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>
