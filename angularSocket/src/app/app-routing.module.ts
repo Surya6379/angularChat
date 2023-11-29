@@ -8,12 +8,12 @@ import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
   {path:"chat",component:ChatComponent},
-  {path:"dashboard",component:DashboardComponent,canActivate:[AuthGuard]},
+  {path:"dashboard",component:DashboardComponent},
   {path:"login",component:LoginComponent},
   {path:"register",component:RegisterComponent},
   {path:"**",component:LoginComponent},
 ];
-
+// ,canActivate:[AuthGuard]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
