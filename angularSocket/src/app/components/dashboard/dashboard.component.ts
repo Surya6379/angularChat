@@ -19,8 +19,9 @@ export class DashboardComponent implements OnInit {
   sideNavBarOptions: any = [];
   subscription !: any
   loggedInUser !: any;
-  graphOptions: any = ['line', 'bar', 'number', 'switch'];
-  firstTimeChange :boolean = false;
+  graphOptions: any = ['line', 'bar', 'number'];
+  firstTimeChange: boolean = false;
+  maxDate = new Date();
   constructor(private socketService: WebsocketService, private service: BackendService) { }
 
   ngOnInit(): void {
@@ -35,11 +36,18 @@ export class DashboardComponent implements OnInit {
   }
   ngAfterViewInit() {
     for (let item of this.sideNavBarOptions) {
-      item.lineChart = new Chart(item.id + 'line', {
-        type: 'line',
-        data: { labels: [], datasets: [{ data: [], borderWidth: 1, },], },
-        options: { scales: { y: { beginAtZero: true, }, }, plugins: { legend: { display: false }, } },
-      });
+      if (item.graphType === 'line')
+        item.lineChart = new Chart(item.id + 'line', {
+          type: 'line',
+          data: { labels: [], datasets: [{ data: [], borderWidth: 1, },], },
+          options: { scales: { y: { beginAtZero: true, }, }, plugins: { legend: { display: false }, } },
+        });
+      if (item.graphType === 'bar')
+        item.barChart = new Chart(item.id + 'bar', {
+          type: 'bar',
+          data: { labels: [], datasets: [{ data: [], borderWidth: 1, },], },
+          options: { scales: { y: { beginAtZero: true, }, }, plugins: { legend: { display: false }, } },
+        });
     }
   }
 
@@ -49,7 +57,8 @@ export class DashboardComponent implements OnInit {
         'id': param.id,
         'name': param.name,
         'state': true,
-        'graphType': 'line',
+        'graphType': this.graphOptions[Math.floor(Math.random() * this.graphOptions.length)],
+        'data': []
       })
     }
   }
@@ -73,27 +82,43 @@ export class DashboardComponent implements OnInit {
     Object.keys(data).forEach((key: any) => {
       this.sideNavBarOptions.forEach((item: any) => {
         if (item.id === key) {
-          let lastLabelCount = item.lineChart.data.labels.length + 1;
-          item.lineChart.data.labels.push(lastLabelCount);
-          item.lineChart.data.datasets[0].data.push(data[key]);
-          item.lineChart.update();
+          item.data.push(data[key]);
+          if (item.graphType === 'line') {
+            item.lineChart.data.labels = [...Array(item.data.length).keys()];
+            item.lineChart.data.datasets[0].data = item.data;
+            item.lineChart.update();
+          }
+          if (item.graphType === 'bar') {
+            item.barChart.data.labels = [...Array(item.data.length).keys()];
+            item.barChart.data.datasets[0].data = item.data;
+            item.barChart.update();
+          }
         }
       });
     })
   }
 
   graphTypeSetter(graphType: string, index: number) {
-    if(!this.firstTimeChange){
-      for (let item of this.sideNavBarOptions) {
-        item.barChart = new Chart(item.id + 'bar', {
+    let sideNavItem = this.sideNavBarOptions[index];
+    sideNavItem.graphType = graphType;
+    if (graphType === 'bar') {
+      setTimeout(() => {
+        sideNavItem.barChart = new Chart(sideNavItem.id + 'bar', {
           type: 'bar',
-          data: { labels: [], datasets: [{ data: [], borderWidth: 1, },], },
+          data: { labels: [...Array(sideNavItem.data.length).keys()], datasets: [{ data: sideNavItem.data, borderWidth: 1, },], },
           options: { scales: { y: { beginAtZero: true, }, }, plugins: { legend: { display: false }, } },
         });
-      }
-      this.firstTimeChange = true;
-    }  
-    this.sideNavBarOptions[index].chart.type = graphType;
+      }, 1)
+    }
+    if (graphType === 'line') {
+      setTimeout(() => {
+        sideNavItem.lineChart = new Chart(sideNavItem.id + 'line', {
+          type: 'line',
+          data: { labels: [...Array(sideNavItem.data.length).keys()], datasets: [{ data: sideNavItem.data, borderWidth: 1, },], },
+          options: { scales: { y: { beginAtZero: true, }, }, plugins: { legend: { display: false }, } },
+        });
+      }, 1)
+    }
   }
 
   dataFromater(data: any) {

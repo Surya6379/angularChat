@@ -17,7 +17,10 @@ import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatSelectModule} from '@angular/material/select';
+import {MatTabsModule} from '@angular/material/tabs';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
@@ -42,11 +45,14 @@ import { RegisterComponent } from './components/register/register.component';
     MatIconModule,
     MatButtonModule,
     MatSidenavModule,
+    MatDatepickerModule,
     MatListModule,
+    MatNativeDateModule,
     MatCheckboxModule,
     MatInputModule,
     MatSnackBarModule,
     MatSelectModule,
+    MatTabsModule,
     MatFormFieldModule,
     BrowserAnimationsModule,
     MatCardModule,

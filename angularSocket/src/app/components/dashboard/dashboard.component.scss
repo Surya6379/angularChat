@@ -24,23 +24,38 @@
     margin: 10px;
 }
 
-.chart{
+.chart {
     height: 250px;
     width: 350px;
 }
 
-.canvasjs-chart-canvas{
+.canvasjs-chart-canvas {
     height: 100px;
 }
 
-.chartContainer{
+.chartContainer {
     height: 100%;
 }
 
 mat-card-content {
     height: 100%;
-  }
+}
 
 .spacer {
     flex: 1 1 auto;
-  }
+}
+
+.temperatureFont {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 80px;
+    margin-top: 60px;
+    color : rgb(0, 195, 255);
+}
+
+.redCol{
+    color : rgb(227, 13, 13);
+}
+
+.greenCol{
+    color : rgb(25, 212, 97);
+}
